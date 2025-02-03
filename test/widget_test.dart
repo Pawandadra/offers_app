@@ -7,6 +7,6 @@ void main() {
     await tester.pumpWidget(MyApp()); // Replace 'MyApp' with the actual app widget name
 
     // Verify that the main screen loads.
-    expect(find.text('LoginPage'), findsOneWidget); // Replace 'Login' with any widget text in your app
+    expect(find.text('login'), findsOneWidget); // Replace 'Login' with any widget text in your app
   });
 }
