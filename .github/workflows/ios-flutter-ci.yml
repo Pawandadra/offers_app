@@ -29,7 +29,9 @@ jobs:
 
       # Step 4: Set up CocoaPods (for iOS dependencies)
       - name: Install CocoaPods
-        run: pod install
+        run: |
+            echo "platform :ios, '15.0'" > ios/Podfile  # Set iOS deployment target
+            pod install
         working-directory: ios
 
       # Step 5: Build the iOS App
