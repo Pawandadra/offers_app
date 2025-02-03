@@ -1,0 +1,49 @@
+name: iOS CI for Flutter
+
+on:
+  push:
+    branches:
+      - main  # Runs on pushes to the main branch
+  pull_request:
+    branches:
+      - main  # Runs on pull requests targeting the main branch
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest  # Use GitHub's macOS runner for iOS builds and tests
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Flutter
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: stable  # Specify the Flutter version (e.g., "3.10.5" for a specific version)
+
+      # Step 3: Install Flutter dependencies
+      - name: Install Flutter Dependencies
+        run: flutter pub get
+
+      # Step 4: Set up CocoaPods (for iOS dependencies)
+      - name: Install CocoaPods
+        run: pod install
+        working-directory: ios
+
+      # Step 5: Build the iOS App
+      - name: Build iOS App
+        run: flutter build ios --no-codesign
+
+      # Step 6: Run Flutter Tests
+      - name: Run Unit Tests
+        run: flutter test
+
+      # Step 7: Run iOS-specific Tests (Optional, if you have integration tests for iOS)
+      - name: Run iOS Simulator Tests
+        run: |
+          xcodebuild test \
+          -workspace ios/Runner.xcworkspace \
+          -scheme Runner \
+          -destination 'platform=iOS Simulator,name=iPhone 14,OS=latest'
