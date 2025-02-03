@@ -1,12 +1,20 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:offers_app/main.dart'; // Adjust the import as per your app's main file
+import 'package:mockito/mockito.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:offers_app/main.dart';
+
+class MockFirebaseApp extends Mock implements FirebaseApp {}
 
 void main() {
-  testWidgets('App loads and shows main screen', (WidgetTester tester) async {
-    // Build the app and trigger a frame.
-    await tester.pumpWidget(MyApp()); // Replace 'MyApp' with the actual app widget name
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+  });
 
-    // Verify that the main screen loads.
-    expect(find.text('login'), findsOneWidget); // Replace 'Login' with any widget text in your app
+  testWidgets('App loads and shows main screen', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp()); // Replace with your app's main widget
+
+    // Verify the login text is displayed
+    expect(find.text('LOGIN NOW'), findsOneWidget); // Replace 'Login' with actual text from your app
   });
 }
